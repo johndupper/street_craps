@@ -17,39 +17,23 @@
 
 
 // global variables
-var rollNumber = 0, pointValue = 0,
-    diceOneValue, diceTwoValue, rollTotal,
-    playerOne, playerTwo;
+var rollNumber = 0, pointValue = 0, loseValues = [2, 3, 12],
+    diceOneValue, diceTwoValue, rollTotal;
 
 
 function rollDiceButtonClicked() {
-  rollNumber += 1;
   generateDiceValues();
   displayDiceRoll();
-
-  if (rollNumber === 1) {
-    if (rollTotal === 7 || rollTotal === 11) {
-      console.log('win!');
-      return true;
-    }
-
-    if (rollTotal === 2 || rollTotal === 3 || rollTotal === 12) {
-      console.log('lose!');
-      return false;
-    }
-
-    pointValue == rollTotal;
-  }
-  if (rollTotal === pointValue || rollTotal === 7) {
-    console.log('winner!', rollNumber);
-  }
+  determineOutcomeOfRoll(rollNumber, rollTotal);
 }
+
 
 function generateDiceValues() {
   diceOneValue = Math.floor(Math.random() * 6 + 1);
   diceTwoValue = Math.floor(Math.random() * 6 + 1);
   rollTotal = diceOneValue + diceTwoValue;
 }
+
 
 function displayDiceRoll() {
   document.getElementById('rollNumber').innerHTML = rollNumber;
@@ -58,3 +42,26 @@ function displayDiceRoll() {
   document.getElementById('total').innerHTML = rollTotal;
 }
 
+
+function determineOutcomeOfRoll(rollNumber, rollValue) {
+  rollNumber += 1;
+  // 1st roll: win, lose, or assign 'point'
+  if (rollNumber === 1) {
+    if (rollValue === 7 || rollValue === 11) { console.log('immediate win!'); }
+    loseValues.forEach(function(loss) {
+      if (rollValue === loss) { console.log('immediate loss!'); }
+    });
+    pointValue === rollValue;
+  }
+
+  // every other roll
+  if (rollValue === pointValue || rollValue === 7) {
+    console.log('win! -> ' + rollNumber + ' turns to score ' + rollValue);
+  }
+  loseValues.forEach(function(loss) {
+    if (rollValue === loss) {
+      console.log('loss! -> ' + rollNumber + ' turns to score ' + rollValue);
+    }
+  });
+  console.log(rollNumber + ": " + rollValue);
+}
